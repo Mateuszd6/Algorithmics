@@ -1,5 +1,5 @@
 /*===============================================================================
-Author: Mateusz Dudzinski.
+Author: Mateusz Dudziński.
 Email: mateuszpd7@gmail.com
 Full Repository: github.com/Mateuszd6/Algorithmics
 Description: Graph library containing template graph class and graph utilities.
