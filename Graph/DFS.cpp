@@ -1,5 +1,5 @@
 /*===============================================================================
-Author: Mateusz Dudziñski.
+Author: Mateusz DudziÅ„ski.
 Email: mateuszpd7@gmail.com
 Full Repository: github.com/Mateuszd6/Algorithmics
 Description: DFS algorithm. Time complexity: O(E+V). Space complexity: O(E+V).
@@ -159,7 +159,7 @@ int main()
 	//	5 -> 2
 	//	2 -> 3
 	//	0 -> 6
-
+	
 	return 0;
 }
 */
