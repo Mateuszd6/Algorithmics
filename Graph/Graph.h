@@ -42,6 +42,7 @@ public:
 	{
 		// Contains all edges from the vertex.
 		std::vector<Edge> edges;
+
 		Vertex() {}
 		Vertex(VertexInfo base_vertex) : VertexInfo(base_vertex) {}
 	};
@@ -50,26 +51,29 @@ private:
 	// Maximum capacity of the graph. 
 	// If requested more vertices on the constructor size will be set to this value.
 	const static int MAX_GRAPH_SIZE = 1000000;
+
 	// Size of the graph.
 	int size;
+
 	// Type of the graph (directed/undirected).
 	GraphType graph_type;
+
 	// Pointer to the array of vertices.
 	Vertex *vertices;
 
 public:
 	// Returns the list (std::vector here) of edges comming out from given vertex. 
-	// Idx must be less than the graph size. O(1).
+	// Idx must be less than the graph size.
 	Vertex operator[] (unsigned int idx) { return vertices[idx]; }
 	const Vertex operator[] (unsigned int idx) const { return vertices[idx]; }
 
-	// Returns the size of the graph. O(1).
+	// Returns the size of the graph.
 	int Size() { return size; }
 
-	// Returns the type of the graph (directed/undirected). O(1).
+	// Returns the type of the graph (directed/undirected).
 	GraphType Type() { return graph_type; }
 
-	// Adds edge between vertices A and B. O(1).
+	// Adds edge between vertices A and B.
 	void AddEdge(int A, int B, EdgeInfo base_edge)
 	{
 		if (Type() == directed)
@@ -85,7 +89,7 @@ public:
 			std::cerr << "Unspecyfied graph type.\n";
 	}
 
-	// Graph constructor, specify size and type (directed/undirected). O(1).
+	// Graph constructor, specify size and type (directed/undirected).
 	Graph(int graph_size, GraphType type)
 	{
 		this->graph_type = type;
@@ -101,7 +105,7 @@ public:
 		// TODO: Should user be able to inicialize all the values with the given array of the vertex infos
 	}
 
-	// Graph destructor. O(1).
+	// Graph destructor.
 	~Graph()
 	{
 		delete[] vertices;
@@ -109,7 +113,7 @@ public:
 
 private:
 	// Used to print graph look in the console. Prints every edge for every vertex from 0 to graph_size-1. 
-	// NOTE: The order of those edges is the order in which there were added to the graph. O(E+V).
+	// NOTE: The order of those edges is the order in which there were added to the graph.
 	friend std::ostream& operator<<(std::ostream &os, const Graph<VertexInfo, EdgeInfo> &graph)
 	{
 		os << "Graph with " << graph.size << " vertices, ";
