@@ -1,6 +1,6 @@
 #include <iostream>
-#include "Graph.h"
-#include "Binary heap.cpp"
+#include "Graph.cpp"
+#include "..\Data structures\Binary heap.cpp"
 
 // Class of the additional edge info, containing info about its weight and < operator used to comapring by 
 // priority queue used by algorithm.
@@ -41,6 +41,7 @@ public:
 // break_at_vertex is used when there is no need to search whole graph. 
 // Function will stop and return incomplete array if given vertex is reached.
 // If -1 passed function won't stop at any vertex.
+
 template <class VertexInfo, class EdgeInfo>
 int *DijkstraShortestPathTree(Graph<VertexInfo, EdgeInfo> &graph, 
 	int source, int *parent_map, int break_at_vertex)
