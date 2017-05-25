@@ -13,7 +13,7 @@ Notes:
 ===============================================================================*/
 
 #include <iostream>
-#include "Graph.h"
+#include "Graph.cpp"
 
 // Function called recursively by the DFS algorithm. Used to traverse the graph.
 // Note that storing parent info is not necessary, but provides additional info to the
