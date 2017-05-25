@@ -3,8 +3,8 @@ Author: Mateusz Dudziński.
 Email: mateuszpd7@gmail.com
 Full Repository: github.com/Mateuszd6/Algorithmics
 Description: Binary heap data structure. Used as a priority queue.
-			 Always gives the greatest element in the set, uses < operator only.
-			 Space complexity: O(n).
+             Always gives the greatest element in the set, uses < operator only.
+             Space complexity: O(n).
 Operations:
 	  * Push - insert new element. Time complexity: O(log(n)).
 	  * Pop - removes greatest element from the set. Time complexity: O(log(n)).
