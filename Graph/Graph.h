@@ -1,7 +1,7 @@
 /*===============================================================================
 Author: Mateusz Dudziński.
 Email: mateuszpd7@gmail.com
-Full Repository: github.com/Mateuszd6/Algorithmics
+Website: In progress.
 Description: Graph library containing template graph class and graph utilities.
 ===============================================================================*/
 
@@ -35,6 +35,8 @@ public:
 	{
 		int from;
 		int to;
+
+		Edge() {} 
 		Edge(EdgeInfo base_edge, int from, int to) : EdgeInfo(base_edge), from(from), to(to) {}
 	};
 
@@ -64,14 +66,14 @@ private:
 public:
 	// Returns the list (std::vector here) of edges comming out from given vertex. 
 	// Idx must be less than the graph size.
-	Vertex operator[] (unsigned int idx) { return vertices[idx]; }
-	const Vertex operator[] (unsigned int idx) const { return vertices[idx]; }
+	inline Vertex operator[] (unsigned int idx) { return vertices[idx]; }
+	inline const Vertex operator[] (unsigned int idx) const { return vertices[idx]; }
 
 	// Returns the size of the graph.
-	int Size() { return size; }
+	inline int Size() { return size; }
 
 	// Returns the type of the graph (directed/undirected).
-	GraphType Type() { return graph_type; }
+	inline GraphType Type() { return graph_type; }
 
 	// Adds edge between vertices A and B.
 	void AddEdge(int A, int B, EdgeInfo base_edge)
