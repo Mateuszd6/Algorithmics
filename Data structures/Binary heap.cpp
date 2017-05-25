@@ -2,19 +2,19 @@
 Author: Mateusz Dudziński.
 Email: mateuszpd7@gmail.com
 Full Repository: github.com/Mateuszd6/Algorithmics
-Description: Binary heap data structure. Used as a priority queue. 
+Description: Binary heap data structure. Used as a priority queue.
 			 Always gives the greatest element in the set, uses < operator only.
 			 Space complexity: O(n).
-			 Operations:
-				 * Push - insert new element. Time complexity: O(log(n)).
-				 * Pop - removes greatest element from the set. Time complexity: O(log(n)).
-				 * Top - returns greatest element in the sett. Time complexity O(1).
-				 * Size - returns the size of the heap (the number of elements in. Time complexity: O(1).
-				 * Capacity - returns the capacity of the heap vector - does not have to be same as size. Time complexity: O(1).
-				 * MaxSize - returns maximum capacity of the heap. Time complexity: O(1).
-				 * Type - returns the type of the heap (maxHeap / minHeap). O(1).
-				 * Empty - returns true if there is no element in heap. Time complexity: O(1).
-				 * ChangeType - changes the type of the heap (form maxHeap to minHeap or vice versa) and rebuilds it. O(n*log(n)) 
+Operations:
+	  * Push - insert new element. Time complexity: O(log(n)).
+	  * Pop - removes greatest element from the set. Time complexity: O(log(n)).
+	  * Top - returns greatest element in the sett. Time complexity O(1).
+	  * Size - returns the size of the heap (the number of elements in. Time complexity: O(1).
+	  * Capacity - returns the capacity of the heap vector - does not have to be same as size. Time complexity: O(1).
+	  * MaxSize - returns maximum capacity of the heap. Time complexity: O(1).
+	  * Type - returns the type of the heap (maxHeap / minHeap). O(1).
+	  * Empty - returns true if there is no element in heap. Time complexity: O(1).
+	  * ChangeType - changes the type of the heap (form maxHeap to minHeap or vice versa) and rebuilds it. O(n*log(n)).
 Notes:
 	  * It uses std::vector as a container, to provide auto extension of the container if needed.
 	  * Only operator that has to be implemented is '<'. Every comparation is used only with this operator.
@@ -222,6 +222,9 @@ private:
 	}
 };
 
+/*
+//============== USAGE EXAMPLE ===================
+
 int main()
 {
 	int arr[] = { 43, 1, 6, 3 , 41, 51, 36, 23, 11};
@@ -284,3 +287,4 @@ int main()
 
 	return 0;
 }
+*/
