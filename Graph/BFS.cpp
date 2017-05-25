@@ -14,7 +14,7 @@ Notes:
 
 #include <iostream>
 #include <queue>
-#include "Graph.h"
+#include "Graph.cpp"
 
 
 // Simple node containing the id of the vertex and the id of the parent through which it was reached.
