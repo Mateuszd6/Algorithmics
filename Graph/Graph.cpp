@@ -129,3 +129,15 @@ private:
 		return os;
 	}
 };
+
+// Class for the additional edge info, containing info about its weight and < operator used to comapring.
+// Used by all weighted-edges algorithms.
+class DistanceEdge
+{
+public:
+	// The weight of the edge, must be positive for this algorithm to work.
+	int weight;
+
+	DistanceEdge () {}
+	DistanceEdge (int weight) : weight(weight) {}
+};
