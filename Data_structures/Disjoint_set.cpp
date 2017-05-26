@@ -144,6 +144,10 @@ public:
     }
 };
 
+
+/*
+//============== USAGE EXAMPLE ===================
+
 int main ()
 {
     std::cout << "Creating disjoint set array with 8 elements...\n";
@@ -166,5 +170,27 @@ int main ()
     std::cout << "Merging 8 and 2...\n";
     arr->Merge(8, 2);
     std::cout << "Find(8) = " << arr->Find(8) << ".\n";
+    //Output:
+    //  Creating disjoint set array with 8 elements...
+    //  Merging 1 and 2...
+    //  Merging 3 and 4...
+    //  Now:
+    //  Find(1) = 1.
+    //  Find(2) = 1.
+    //  Find(3) = 3.
+    //  Find(4) = 3.
+    //  Merging 2 and 4...
+    //  Now:
+    //  Find(1) = 1.
+    //  Find(2) = 1.
+    //  Find(3) = 1.
+    //  Find(4) = 1.
+    //  Adding new node (with index 8).
+    //  Merging 8 and 2...
+    //  Find(8) = 1.
+
+
+
     return 0;
 }
+*/
