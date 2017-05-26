@@ -4,11 +4,11 @@ Email: mateuszpd7@gmail.com
 Full Repository: github.com/Mateuszd6/Algorithmics
 Description: Dijkstra shortest-path algorithm using binary heap. Time complexity: O(E*log(E)). Space complexity: O(E+V).
 Notes:
-	  * This algorithm builds the shortest-paths-tree over the given graph, finding the shortest path from given source
-	  	vertex to every verex reachable it.
-	  * Custom binary heap is used here, but std::priority_queue fits as well, but < operator must be redefined, since 
-	  	this containter is a max heap, when here min heap is needed.
-	  * This algorithm works for both type of graps: directed and undirected. 
+       * This algorithm builds the shortest-paths-tree over the given graph, finding the shortest path from given source
+	 vertex to every verex reachable it.
+       * Custom binary heap is used here, but std::priority_queue fits as well, but < operator must be redefined, since 
+	 this containter is a max heap, when here min heap is needed.
+       * This algorithm works for both type of graps: directed and undirected. 
 ===============================================================================*/
 
 #include <iostream>
