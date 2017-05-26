@@ -4,18 +4,17 @@ Email: mateuszpd7@gmail.com
 Full Repository: github.com/Mateuszd6/Algorithmics
 Description: BFS algorithm. Time complexity: O(E+V). Space complexity: O(E+V).
 Notes:
-	  * This algorithm is used to travere graph in breadth-first way and perform a given
-		action in every vertex.
-	  * This algorithm works for undirected graphs, as it doesn't metter from which
-		vertex start, algorithm will always find every vertex in whole connected component.
-	  * Algorith behavour for directed graphs is random.
-	  * See usage example for details.
+       * This algorithm is used to travere graph in breadth-first way and perform a given
+         action in every vertex.
+       * This algorithm works for undirected graphs, as it doesn't metter from which
+         vertex start, algorithm will always find every vertex in whole connected component.
+       * Algorith behavour for directed graphs is random.
+       * See usage example for details.
 ===============================================================================*/
 
 #include <iostream>
 #include <queue>
 #include "Graph.cpp"
-
 
 // Simple node containing the id of the vertex and the id of the parent through which it was reached.
 struct BFSQueueNode
