@@ -6,20 +6,20 @@ Description: Disjoit-set data structure also known as find-union. Allows for qui
              Set of nodes with IDs from 0 to size-1, partitioned into a number of disjoint subsets. For each 
              subset there is a one node that represents the set. At start each node makes one-element set.
 Operations:
-	  * Find - find a ID of the set that given node belongs to. Time complexity: O(log*(n)).
+      * Find - find a ID of the set that given node belongs to. Time complexity: O(log*(n)).
       * Merge - given two nodes, if their sets are different merge them into one. Time complexity: O(log*(n)).
       * Add - add a new node which is also one-element set.  Time complexity: O(1).
       * Empty - returns true if there is no element in the structure. Time complexity: O(1).
-	  * Clear - clear all elements in the structure. Time complexity: O(1).
+      * Clear - clear all elements in the structure. Time complexity: O(1).
       * Size - returns the size of the structure (the number of elements in). Time complexity: O(1).
-	  * Capacity - returns the capacity of the structure - does not have to be same as size. Time complexity: O(1).
-	  * MaxSize - returns maximum capacity of the structure. Time complexity: O(1).
+      * Capacity - returns the capacity of the structure - does not have to be same as size. Time complexity: O(1).
+      * MaxSize - returns maximum capacity of the structure. Time complexity: O(1).
 
 Notes:
       * Made on std::vector it is also possible to add new nodes with Add function. New nodes is pushed to the back
         and if there where n elements before adding, its ID after is n.
       * Uses union-by-rank and path-compression heuristics.
-	  * log* in the complexity is an iterated logarithm of n.
+      * log* in the complexity is an iterated logarithm of n.
 ===============================================================================*/
 
 #include <iostream>
@@ -115,7 +115,7 @@ public:
     // Clear the array.
     void Clear() { nodes.clear(); }
 
-	// Default constructor. Creates an empty array.
+		// Default constructor. Creates an empty array.
     DisjointSetArray ()
     {
         nodes = std::vector<DisjointSetNode>(0);
@@ -188,8 +188,6 @@ int main ()
     //  Adding new node (with index 8).
     //  Merging 8 and 2...
     //  Find(8) = 1.
-
-
 
     return 0;
 }
