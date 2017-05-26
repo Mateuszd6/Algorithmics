@@ -15,19 +15,6 @@ Notes:
 #include "Graph.cpp"
 #include "..\Data_structures\Binary_heap.cpp"
 
-// TODO: move this to the graph-utility (graph?) file.
-// Class of the additional edge info, containing info about its weight and < operator used to comapring by 
-// priority queue used by algorithm.
-class DistanceEdge
-{
-public:
-	// The weight of the edge, must be positive for this algorithm to work.
-	int weight;
-
-	DistanceEdge () {}
-	DistanceEdge (int weight) : weight(weight) {}
-};
-
 // Class used by binary heap used to store info about which vertex is reachable with which cost.
 // On the top of the priority queue there is always vertex with lowest reach cost.
 // Only operator < is used by this data strucutre.
