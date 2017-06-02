@@ -66,7 +66,7 @@ private:
         
         // Now every vertex of the path points directly to the parent vertex.
         for (int i = 0; i < compressed_path.size(); ++i)
-            nodes[i].parent = current_vertex;
+            nodes[compressed_path[i]].parent = current_vertex;
 
         // Return the found vertex.
         return current_vertex;
@@ -143,7 +143,6 @@ public:
         }
     }
 };
-
 
 /*
 //============== USAGE EXAMPLE ===================
