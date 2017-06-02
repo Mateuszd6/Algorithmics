@@ -89,17 +89,17 @@ struct Empty { Empty() {} };
 
 int main ()
 {
-	Graph<Empty, DistanceEdge> G(9, undirected);
-	G.AddEdge(1, 2, DistanceEdge(3));
-	G.AddEdge(3, 1, DistanceEdge(1));
-	G.AddEdge(3, 2, DistanceEdge(1));
-	G.AddEdge(5, 3, DistanceEdge(1));
-	G.AddEdge(3, 6, DistanceEdge(7));
-	G.AddEdge(0, 6, DistanceEdge(2));
-	G.AddEdge(5, 0, DistanceEdge(4));
-	G.AddEdge(0, 4, DistanceEdge(1));
-	G.AddEdge(5, 4, DistanceEdge(2));
-	G.AddEdge(7, 8, DistanceEdge(4));
+    Graph<Empty, DistanceEdge> G(9, undirected);
+    G.AddEdge(1, 2, DistanceEdge(3));
+    G.AddEdge(3, 1, DistanceEdge(1));
+    G.AddEdge(3, 2, DistanceEdge(1));
+    G.AddEdge(5, 3, DistanceEdge(1));
+    G.AddEdge(3, 6, DistanceEdge(7));
+    G.AddEdge(0, 6, DistanceEdge(2));
+    G.AddEdge(5, 0, DistanceEdge(4));
+    G.AddEdge(0, 4, DistanceEdge(1));
+    G.AddEdge(5, 4, DistanceEdge(2));
+    G.AddEdge(7, 8, DistanceEdge(4));
     Graph<Empty, DistanceEdge> * outputSpanningTree = new Graph<Empty, DistanceEdge>(9, undirected); 
     std:: cout << "Minimal spanning tree weight: " << MinimalSpanningTree(G, outputSpanningTree) << ".\nMinimal spanning tree: ";
     std:: cout << (* outputSpanningTree);
