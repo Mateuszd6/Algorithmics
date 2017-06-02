@@ -52,6 +52,7 @@ int MinimalSpanningTree (Graph<VertexInfo, EdgeInfo> &graph, void* outputTree)
 
     // Iterate over the edges...
     for (int i = 0; i < edges.size(); ++i)
+    {
         // If there are two edges in different sets...
         if (vertices->Find(edges[i].to) != vertices->Find(edges[i].from))
         {
@@ -65,7 +66,8 @@ int MinimalSpanningTree (Graph<VertexInfo, EdgeInfo> &graph, void* outputTree)
             // Merge the two vertices sets.
             vertices->Merge(edges[i].to, edges[i].from);
         }
-
+    }
+    
     // Delete allocated strucutres.
     delete vertices;
 
