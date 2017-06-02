@@ -23,30 +23,53 @@ Notes:
 template <class VertexInfo, class EdgeInfo>
 int MinimalSpanningTree (Graph<VertexInfo, EdgeInfo> &graph, void* outputTree)
 {
-	static_assert(std::is_base_of<DistanceEdge, EdgeInfo>::value, "EdgeInfo must inherit from DistanceEdge");
+    static_assert(std::is_base_of<DistanceEdge, EdgeInfo>::value, "EdgeInfo must inherit from DistanceEdge");
+    
+    // Determine if result tree creation is needed.
     bool fillOutputTree = (outputTree != NULL);
+
+    // Cast the void pointer to pointer to the same type of graph as was given. 
     Graph<VertexInfo, EdgeInfo> * output = (Graph<VertexInfo, EdgeInfo> *)outputTree;
+
+    // Vector of all edges in the gprah.
     std::vector < Graph<VertexInfo, EdgeInfo> :: Edge > edges;
+    
+    // Disjoint-set array.
     DisjointSetArray *vertices = new DisjointSetArray(graph.Size());
+
+    // The result weight of the tree.
     int result = 0;
 
+    // Put all the edges form the graph to the vector.
+    // NOTE: Because graph is directed every edge will be inserted twice (e.g. from 0 to 4 and form 4 to 0),
+    //       But it doesn't metter for the algorithm.
     for (int i = 0; i < graph.Size(); ++i)
         for (int j = 0; j < graph[i].edges.size(); ++j)
             edges.push_back(graph[i].edges[j]);
+
+    // Sort edges by weight in increasing oreder. 
     std::sort(edges.begin(), edges.end());
+
+    // Iterate over the edges...
     for (int i = 0; i < edges.size(); ++i)
-    {
+        // If there are two edges in different sets...
         if (vertices->Find(edges[i].to) != vertices->Find(edges[i].from))
         {
+            // This edge is in the result tree.
             if (fillOutputTree)
                 output->AddEdge(edges[i].from, edges[i].to, (EdgeInfo)edges[i]);
+            
+            // Add its weight to the total weight.
             result += edges[i].weight;
+
+            // Merge the two vertices sets.
             vertices->Merge(edges[i].to, edges[i].from);
         }
-    }
 
+    // Delete allocated strucutres.
     delete vertices;
 
+    // Return the result.
     return result;
 }
 
@@ -58,7 +81,7 @@ int MinimalSpanningTree (Graph<VertexInfo, EdgeInfo> &graph)
     return MinimalSpanningTree(graph, NULL);
 }
 
-//*
+/*
 //============== USAGE EXAMPLE ===================
 
 //Empty struct as vertices need no more additional info.
@@ -95,4 +118,4 @@ int main ()
 
     return 0;
 }
-//*/
+*/
