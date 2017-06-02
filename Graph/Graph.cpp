@@ -140,4 +140,9 @@ public:
 
 	DistanceEdge () {}
 	DistanceEdge (int weight) : weight(weight) {}
+
+	bool operator < (const DistanceEdge& other)
+	{
+		return weight < other.weight;
+	}
 };
