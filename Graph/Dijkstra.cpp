@@ -42,7 +42,6 @@ public:
 // break_at_vertex is used when there is no need to search whole graph. 
 // Function will stop and return incomplete array if given vertex is reached.
 // If -1 passed function won't stop at any vertex.
-
 template <class VertexInfo, class EdgeInfo>
 int *DijkstraShortestPathTree(Graph<VertexInfo, EdgeInfo> &graph, 
 	int source, int *parent_map, int break_at_vertex)
@@ -224,6 +223,18 @@ int main()
 	std::cout << "[vertex\tcost]\n";
 	for (int i = 0; i < G.Size(); ++i)
 		std::cout << "   " << i << "\t " << cost_arr[i] << "\n";
+	//Output:
+	//	Total cost array form vertex 1:
+	//	[vertex	cost]
+	//	0	 5
+	//	1	 0
+	//	2	 2
+	//	3	 1
+	//	4	 4
+	//	5	 2
+	//	6	 7
+	//	7	 -1
+	//	8	 -1
 
 	std::vector<int> *path = new std::vector<int>();
 	std::cout << "\nCost of going form 2 to 0 is " << ShortestPath(G, 2, 0, path) << " (";
@@ -234,6 +245,8 @@ int main()
 			std::cout << "->";
 	}
 	std::cout << ")\n";
+	//Output:
+	//	Cost of going form 2 to 0 is 5 (2->3->5->4->0)
 
 	return 0;
 }
