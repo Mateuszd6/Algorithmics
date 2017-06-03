@@ -31,8 +31,8 @@ int MinimalSpanningTree (Graph<VertexInfo, EdgeInfo> &graph, void* outputTree)
     // Cast the void pointer to pointer to the same type of graph as was given. 
     Graph<VertexInfo, EdgeInfo> * output = (Graph<VertexInfo, EdgeInfo> *)outputTree;
 
-    // Vector of all edges in the gprah.
-    std::vector < Graph<VertexInfo, EdgeInfo> :: Edge > edges;
+    // Vector of all edges in the graph.
+    std::vector<Graph<VertexInfo,EdgeInfo>::Edge> *edges = new std::vector<Graph<VertexInfo,EdgeInfo>::Edge>;
     
     // Disjoint-set array.
     DisjointSetArray *vertices = new DisjointSetArray(graph.Size());
@@ -45,31 +45,32 @@ int MinimalSpanningTree (Graph<VertexInfo, EdgeInfo> &graph, void* outputTree)
     //       But it doesn't metter for the algorithm.
     for (int i = 0; i < graph.Size(); ++i)
         for (int j = 0; j < graph[i].edges.size(); ++j)
-            edges.push_back(graph[i].edges[j]);
+            edges->push_back(graph[i].edges[j]);
 
     // Sort edges by weight in increasing oreder. 
-    std::sort(edges.begin(), edges.end());
+    std::sort(edges->begin(), edges->end());
 
     // Iterate over the edges...
-    for (int i = 0; i < edges.size(); ++i)
+    for (int i = 0; i < edges->size(); ++i)
     {
         // If there are two edges in different sets...
-        if (vertices->Find(edges[i].to) != vertices->Find(edges[i].from))
+        if (vertices->Find((* edges)[i].to) != vertices->Find((* edges)[i].from))
         {
             // This edge is in the result tree.
             if (fillOutputTree)
-                output->AddEdge(edges[i].from, edges[i].to, (EdgeInfo)edges[i]);
+                output->AddEdge((* edges)[i].from, (* edges)[i].to, (EdgeInfo)(* edges)[i]);
             
             // Add its weight to the total weight.
-            result += edges[i].weight;
+            result += (* edges)[i].weight;
 
             // Merge the two vertices sets.
-            vertices->Merge(edges[i].to, edges[i].from);
+            vertices->Merge((* edges)[i].to, (* edges)[i].from);
         }
     }
     
     // Delete allocated strucutres.
     delete vertices;
+    delete edges;
 
     // Return the result.
     return result;
