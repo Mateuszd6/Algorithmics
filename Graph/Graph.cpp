@@ -89,6 +89,34 @@ public:
 			std::cerr << "Unspecyfied graph type.\n";
 	}
 
+	// Reverse all edges in the graph.
+	void Reverse()
+	{
+		if (Type() == undirected)
+		{
+			std:: cerr << "Reversing is only allowed for directed graph.\n";
+			return;
+		}
+
+		// Allocate new array of vertices.
+		Vertex *verticesOfReversedGraph = new Vertex[Size()];
+
+		// Reverse every edge in the graph and write it the allocated array.
+		for (int i = 0; i < Size(); ++i)
+			for (int j = 0; j < (* this)[i].edges.size(); ++j)
+			{
+				Edge curr_edge = ((* this)[i].edges[j]);
+				verticesOfReversedGraph[curr_edge.to].edges.push_back(
+					Edge((EdgeInfo)curr_edge, curr_edge.to, curr_edge.from));
+			}
+
+		// Swap ond and new vertices.
+		std::swap(vertices, verticesOfReversedGraph);
+	
+		// delete the old array of vertices.
+		delete[] verticesOfReversedGraph;
+	}
+
 	// Graph constructor, specify size and type (directed/undirected).
 	Graph(int graph_size, GraphType type)
 	{
