@@ -219,18 +219,7 @@ public:
             tree[i].subtree_value = GetValue(tree[i].inserted_value, tree[LeftChild(i)].subtree_value, tree[RightChild(i)].subtree_value, tree[i].right - tree[i].left + 1);
         }
     }
-
-    void deb()
-    {
-        for (int i = 1; i < 2*size; ++i)
-        {
-            if (((i^ (i-1))& i ) == i)
-                std::cout << "\n";
-            std::cout << tree[i].inserted_value << "/" << tree[i].subtree_value << "(" << tree[i].left << ";" << tree[i].right << ") ";
-        }
-        std::cout << "\n";
-    }
-
+    
     // Destructor.
     ~IntervalTree()
     {
