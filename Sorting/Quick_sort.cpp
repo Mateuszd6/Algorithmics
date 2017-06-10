@@ -15,7 +15,6 @@ Notes:
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
-#include <functional>
 #include "..\Utility.cpp"
 
 // Strucutre return by Partition function.
