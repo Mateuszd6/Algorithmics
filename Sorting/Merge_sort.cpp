@@ -94,13 +94,13 @@ void MergeSort(T * array, int size)
         T *tmp_left = new T[(size + 3)/2];
         T *tmp_right = new T[(size + 3)/2];
         _MergeSort(array, 0, size-1, NULL, tmp_left, tmp_right);
-        
+
         delete[] tmp_left;
         delete[] tmp_right;
     }
 }
 
-//*
+/*
 //============== USAGE EXAMPLE ===================
 
 // Function used for different than default comparation. 
@@ -133,4 +133,4 @@ int main()
 
     return 0;
 }
-//*/
+*/
