@@ -61,7 +61,7 @@ void InsertionSort (T *array, int size)
     InsertionSort(array, size, NULL);
 }
 
-//*
+/*
 //============== USAGE EXAMPLE ===================
 
 // Function used for different than default comparation. 
@@ -94,4 +94,4 @@ int main()
 
     return 0;
 }
-//*/
+*/
