@@ -11,21 +11,22 @@ Notes:
 
 #include <iostream>
 #include <cstdlib>
-#include <functional>
 #include <ctime>
 
+#define COUNTING_SORT_GET_INDEX(VAL) ((use_get_index_with_info) ? GetIndexWithInfo(VAL, AditionalGetIndexInfo) : GetIndex(VAL)) 
+
 template <typename T>
-void CountingSort(T *array, int size, void *GetIndex)
+void _countingSort(T *array, int size, int(*GetIndex)(T), int(*GetIndexWithInfo)(T, void*), 
+    void *AditionalGetIndexInfo)
 {
-    // Function used to get index.
-    int(*_getIndex)(T) = static_cast<int(*)(T)>(GetIndex);
+    bool use_get_index_with_info = (GetIndexWithInfo != NULL);
 
     // Search the array and find largest and lowest indexes.
-    int max_index = _getIndex(array[0]);
-    int min_index = _getIndex(array[0]);
+    int max_index = COUNTING_SORT_GET_INDEX(array[0]);
+    int min_index = COUNTING_SORT_GET_INDEX(array[0]);
     for (int i = 0; i < size; ++i)
     {
-        int index = _getIndex(array[i]);
+        int index = COUNTING_SORT_GET_INDEX(array[i]);
         if (max_index < index)
             max_index = index;
         if (min_index > index)
@@ -44,7 +45,7 @@ void CountingSort(T *array, int size, void *GetIndex)
     // After this loop tmp[i] will contain number of elements that GetIndex
     // will return i - min_index;
     for (int i = 0; i < size; ++i)
-        tmp[_getIndex(array[i])-min_index]++;
+        tmp[COUNTING_SORT_GET_INDEX(array[i])-min_index]++;
     
     // After this loop tmp[i] will contain number of elements that GetIndex 
     // will return less or equal i - min_index.
@@ -55,10 +56,10 @@ void CountingSort(T *array, int size, void *GetIndex)
     for (int i = size-1; i >= 0; --i)
     {
         // Use the index calcuated to indicate the new index of the element.
-        result[tmp[_getIndex(array[i])-min_index]-1] = array[i];
+        result[tmp[COUNTING_SORT_GET_INDEX(array[i])-min_index]-1] = array[i];
 
         // Decrement the index by one.
-        tmp[_getIndex(array[i])-min_index]--;
+        tmp[COUNTING_SORT_GET_INDEX(array[i])-min_index]--;
     }
     
     // Copy array used to store result to the input array.
@@ -67,6 +68,18 @@ void CountingSort(T *array, int size, void *GetIndex)
     // Delete allocated arrays.
     delete[] result;
     delete[] tmp;
+}
+
+template <typename T>
+void CountingSort(T *array, int size, int(*GetIndex)(T))
+{
+    _countingSort(array, size, GetIndex, (int(*)(T, void*))NULL, NULL);
+}
+
+template <typename T>
+void CountingSort(T *array, int size, int(*GetIndexWithInfo)(T, void*), void *AditionalInfo)
+{
+    _countingSort(array, size, (int(*)(T))NULL, GetIndexWithInfo, AditionalInfo);
 }
 
 /*
@@ -79,9 +92,10 @@ int GetIndexInt (int self)
 }
 
 // Function used by counting sort when sorting inteeger pairs.
-int GetIndexPair (std::pair<int, int> self)
+int GetIndexPair (int *self, void *pindex)
 {
-    return self.first;
+    int *idx = (int *)pindex;
+    return self[(* idx)];
 }
 
 int main()
@@ -93,26 +107,31 @@ int main()
         arr1[i] = rand()%5+3;
     for (int i = 0; i < 10; ++i)
         std::cout << arr1[i] << " ";
-    CountingSort (arr1, 10, (void *)GetIndexInt);
+    CountingSort (arr1, 10, GetIndexInt);
     std::cout << "\nSorted array: ";
     for (int i = 0; i < 10; ++i)
         std::cout << arr1[i] << " ";
-    std::pair<int,int> *arr2 = new std::pair<int,int>[10];
+    int **arr2 = new int* [10];
     std::cout << "\nInput pair array: ";
     for (int i = 0; i < 10; ++i)
-        arr2[i] = std::make_pair(rand()%5, rand()%5);
+    {
+        arr2[i] = new int[2];
+        arr2[i][0] = rand()%5;
+        arr2[i][1] = rand()%5;
+    }
     for (int i = 0; i < 10; ++i)
-        std::cout << "(" << arr2[i].first << ";" << arr2[i].second << ") ";
-    CountingSort (arr2, 10, (void *)GetIndexPair);
+        std::cout << "(" << arr2[i][0] << ";" << arr2[i][1] << ") ";
+    int sort_by_index = 0;
+    CountingSort (arr2, 10, GetIndexPair, &sort_by_index);
     std::cout << "\nSorted array (by first): ";
     for (int i = 0; i < 10; ++i)
-        std::cout << "(" << arr2[i].first << ";" << arr2[i].second << ") ";
+        std::cout << "(" << arr2[i][0] << ";" << arr2[i][1] << ") ";
     //Possible output:
-    //  Input int array: 3 1 2 3 2 3 0 4 0 0
-    //  Sorted array: 0 0 0 1 2 2 3 3 3 4
-    //  Input pair array: (3;3) (1;0) (2;2) (2;2) (2;1) (0;3) (1;4) (2;0) (2;0) (4;0)
-    //  Sorted array (by first): (0;3) (1;0) (1;4) (2;2) (2;2) (2;1) (2;0) (2;0) (3;3) (4;0)
-
+    //  Input int array: 5 5 7 4 6 3 3 3 4 7
+    //  Sorted array: 3 3 3 4 4 5 5 6 7 7
+    //  Input pair array: (3;3) (2;4) (3;4) (1;4) (0;0) (3;1) (2;2) (3;1) (0;3) (0;2)
+    //  Sorted array (by first): (0;0) (0;3) (0;2) (1;4) (2;4) (2;2) (3;3) (3;4) (3;1) (3;1)
+    
     return 0;
 }
 */
