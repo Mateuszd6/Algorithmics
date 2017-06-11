@@ -54,7 +54,7 @@ void CountingSort(T *array, int size, int data_range, void *GetIndex)
     delete[] tmp;
 }
 
-//*
+/*
 //============== USAGE EXAMPLE ===================
 
 // Function used by counting sort when sorting inteegers.
@@ -69,7 +69,6 @@ int GetIndexPair (std::pair<int, int> self)
     return self.first;
 }
 
-/*
 int main()
 {
 	srand(time(NULL));
