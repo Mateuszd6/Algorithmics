@@ -15,14 +15,11 @@ Notes:
 
 template <typename T>
 void Merge (T* array, int begin1, int end1, int begin2, int end2, 
-            void *Compare, T* tmp_left, T *tmp_right)
+            bool (*Compare)(T, T), T* tmp_left, T *tmp_right)
 {
     // If custiom comapre function is specified use static_cast it 
     // to bool function that takes two elements of type T.
-    bool(*_compare)(T, T);
     bool use_custom_compare = (Compare != NULL);
-    if (use_custom_compare)
-        _compare = static_cast<bool(*)(T, T)>(Compare);
 
     // This are indexes of next not-assigned element in both temporary arrays.
     int next_in_left = 0, next_in_right = 0;
@@ -36,7 +33,7 @@ void Merge (T* array, int begin1, int end1, int begin2, int end2,
     for (int i = begin1; i <= end2; ++i)
     {
         bool isLower = (use_custom_compare) ? 
-            utility::IsLower(tmp_left[next_in_left], tmp_right[next_in_right], _compare) :
+            utility::IsLower(tmp_left[next_in_left], tmp_right[next_in_right], Compare) :
             utility::IsLower(tmp_left[next_in_left], tmp_right[next_in_right]);
 
         // Special cases when end of one tmp arrays is reached:
@@ -55,7 +52,7 @@ void Merge (T* array, int begin1, int end1, int begin2, int end2,
 
 // Recursive call for MergeSort algorithm.
 template <typename T>
-void _MergeSort (T *array, int begin, int end, void *Compare, T *tmp_left, T *tmp_right)
+void _mergeSort (T *array, int begin, int end, bool (*Compare)(T, T), T *tmp_left, T *tmp_right)
 {
     // If the interval is not valid simply return.
     if (begin >= end)
@@ -63,8 +60,8 @@ void _MergeSort (T *array, int begin, int end, void *Compare, T *tmp_left, T *tm
     
     // Callculate the middle of the interval and call function recursivly.
     int m = (end-begin+1)/2;
-    _MergeSort (array, begin, begin+m-1, Compare, tmp_left, tmp_right);
-    _MergeSort (array, begin+m, end, Compare, tmp_left, tmp_right);
+    _mergeSort (array, begin, begin+m-1, Compare, tmp_left, tmp_right);
+    _mergeSort (array, begin+m, end, Compare, tmp_left, tmp_right);
     
     // Merge two sorted interval into one.
     Merge (array, begin, begin+m-1, begin+m, end, Compare, tmp_left, tmp_right);
@@ -72,13 +69,13 @@ void _MergeSort (T *array, int begin, int end, void *Compare, T *tmp_left, T *tm
 
 // Sort the given array. Use custom compare function.
 template <typename T>
-void MergeSort(T * array, int size, void *Compare)
+void MergeSort(T * array, int size, bool (*Compare)(T, T))
 {
     if (size > 1)
     {
         T *tmp_left = new T[(size + 3)/2];
         T *tmp_right = new T[(size + 3)/2];
-        _MergeSort(array, 0, size-1, Compare, tmp_left, tmp_right);
+        _mergeSort(array, 0, size-1, Compare, tmp_left, tmp_right);
         
         delete[] tmp_left;
         delete[] tmp_right;
@@ -93,7 +90,7 @@ void MergeSort(T * array, int size)
     {
         T *tmp_left = new T[(size + 3)/2];
         T *tmp_right = new T[(size + 3)/2];
-        _MergeSort(array, 0, size-1, NULL, tmp_left, tmp_right);
+        _mergeSort(array, 0, size-1, (bool(*)(T,T))NULL, tmp_left, tmp_right);
 
         delete[] tmp_left;
         delete[] tmp_right;
