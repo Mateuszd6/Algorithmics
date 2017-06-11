@@ -14,14 +14,11 @@ Notes:
 #include "..\Utility.cpp"
 
 template <typename T>
-void InsertionSort (T *array, int size, void *Compare)
+void InsertionSort (T *array, int size, bool (*Compare)(T, T))
 { 
     // If custiom comapre function is specified use static_cast it 
     // to bool function that takes two elements of type T.
-    bool(*_compare)(T, T);
     bool use_custom_compare = (Compare != NULL);
-    if (use_custom_compare)
-        _compare = static_cast<bool(*)(T, T)>(Compare);
     
     // Iterate over whole array:
     for (int i = 1; i < size; ++i)
@@ -36,7 +33,7 @@ void InsertionSort (T *array, int size, void *Compare)
         while (j > 0)
         {
             bool isGreater = (use_custom_compare) ? 
-                utility::IsGreater(array[j-1], key, _compare) : 
+                utility::IsGreater(array[j-1], key, Compare) : 
                 utility::IsGreater(array[j-1], key);
 
             // If given element is greater than key element marked up before entering loop...
@@ -58,7 +55,7 @@ void InsertionSort (T *array, int size, void *Compare)
 template <typename T>
 void InsertionSort (T *array, int size)
 { 
-    InsertionSort(array, size, NULL);
+    InsertionSort(array, size, (bool(*)(T,T))NULL);
 }
 
 /*
