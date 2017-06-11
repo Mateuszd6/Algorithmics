@@ -27,14 +27,11 @@ struct PartitionInfo
 };
 
 template <typename T>
-PartitionInfo RandomPartition (T *array, int begin, int end, void* Compare)
+PartitionInfo RandomPartition (T *array, int begin, int end, bool(*Compare)(T, T))
 {
     // If custiom comapre function is specified use static_cast it 
     // to bool function that takes two elements of type T.
-    bool(*_compare)(T, T);
     bool use_custom_compare = (Compare != NULL);
-    if (use_custom_compare)
-        _compare = static_cast<bool(*)(T, T)>(Compare);
     
     // The strucutre that holds the result.
     PartitionInfo res;
@@ -56,11 +53,11 @@ PartitionInfo RandomPartition (T *array, int begin, int end, void* Compare)
     for (int i = 0; i < part; ++i)
     {
         bool isLower = (use_custom_compare) ? 
-            utility::IsLower(array[i], array[part], _compare) : 
+            utility::IsLower(array[i], array[part], Compare) : 
             utility::IsLower(array[i], array[part]);
             
         bool isGreater = (use_custom_compare) ? 
-            utility::IsGreater(array[i], array[part], _compare) : 
+            utility::IsGreater(array[i], array[part], Compare) : 
             utility::IsGreater(array[i], array[part]);
 
         // If element is less than pivot...
@@ -145,7 +142,7 @@ PartitionInfo RandomPartition (T *array, int begin, int end, void* Compare)
 
 // Recursive call for Quicksort algorithm.
 template <typename T>
-void _QuickSort (T *array, int begin, int end, void *Compare)
+void _quickSort (T *array, int begin, int end, bool(*Compare)(T,T))
 {
     // If the interval is not valid simply return.
     if (begin >= end)
@@ -153,16 +150,16 @@ void _QuickSort (T *array, int begin, int end, void *Compare)
     
     // Otherwise split the interval into three parts and do recursive calls.
     PartitionInfo info = RandomPartition(array, begin, end, Compare);
-    _QuickSort (array, begin, info.low, Compare);
-    _QuickSort (array, info.high, end, Compare);
+    _quickSort (array, begin, info.low, Compare);
+    _quickSort (array, info.high, end, Compare);
 }
 
 // Sort the given array. Use custom compare function.
 template <typename T>
-void QuickSort(T * array, int size, void *Compare)
+void QuickSort(T * array, int size, bool(*Compare)(T,T))
 {
     if (size > 1)
-        _QuickSort(array, 0, size-1, Compare);
+        _quickSort(array, 0, size-1, Compare);
 }
 
 // Sort the given array. Use '<' operator.
@@ -170,7 +167,7 @@ template <typename T>
 void QuickSort(T * array, int size)
 {
     if (size > 1)
-        _QuickSort(array, 0, size-1, NULL);
+        _quickSort(array, 0, size-1, (bool(*)(T,T))NULL);
 }
 
 /*
