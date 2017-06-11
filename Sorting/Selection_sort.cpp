@@ -14,14 +14,11 @@ Notes:
 #include "..\Utility.cpp"
 
 template <typename T>
-void SelectionSort (T *array, int size, void *Compare)
+void SelectionSort (T *array, int size, bool(*Compare)(T,T))
 {
     // If custiom comapre function is specified use static_cast it 
     // to bool function that takes two elements of type T.
-    bool(*_compare)(T, T);
     bool use_custom_compare = (Compare != NULL);
-    if (use_custom_compare)
-        _compare = static_cast<bool(*)(T, T)>(Compare);
     
     // The index of the lower element.
     int min_index;
@@ -36,7 +33,7 @@ void SelectionSort (T *array, int size, void *Compare)
         for (int j = i+1; j < size; ++j)
         {
             bool isLower = (use_custom_compare) ? 
-                utility::IsLower(array[j], array[min_index], _compare) : 
+                utility::IsLower(array[j], array[min_index], Compare) : 
                 utility::IsLower(array[j], array[min_index]);
             // If it is lower than current element with a min_index change the index.
             if (isLower)
@@ -51,7 +48,7 @@ void SelectionSort (T *array, int size, void *Compare)
 template <typename T>
 void SelectionSort (T *array, int size)
 {
-    SelectionSort(array, size, NULL);
+    SelectionSort(array, size, (bool(*)(T,T))NULL);
 }
 
 /*
