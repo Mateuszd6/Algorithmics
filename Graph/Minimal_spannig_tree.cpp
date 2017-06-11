@@ -21,15 +21,12 @@ Notes:
 // pointer to the empty graph with same size, to get the graph representing the spanning tree.
 // If no tree needs to be generated outputTree should be passed NULL. 
 template <class VertexInfo, class EdgeInfo>
-int MinimalSpanningTree (Graph<VertexInfo, EdgeInfo> &graph, void* outputTree)
+int MinimalSpanningTree (Graph<VertexInfo, EdgeInfo> &graph, Graph<VertexInfo, EdgeInfo> *outputTree)
 {
     static_assert(std::is_base_of<DistanceEdge, EdgeInfo>::value, "EdgeInfo must inherit from DistanceEdge");
     
     // Determine if result tree creation is needed.
     bool fillOutputTree = (outputTree != NULL);
-
-    // Cast the void pointer to pointer to the same type of graph as was given. 
-    Graph<VertexInfo, EdgeInfo> * output = (Graph<VertexInfo, EdgeInfo> *)outputTree;
 
     // Vector of all edges in the graph.
     std::vector<Graph<VertexInfo,EdgeInfo>::Edge> *edges = new std::vector<Graph<VertexInfo,EdgeInfo>::Edge>;
@@ -58,7 +55,7 @@ int MinimalSpanningTree (Graph<VertexInfo, EdgeInfo> &graph, void* outputTree)
         {
             // This edge is in the result tree.
             if (fillOutputTree)
-                output->AddEdge((* edges)[i].from, (* edges)[i].to, (EdgeInfo)(* edges)[i]);
+                outputTree->AddEdge((* edges)[i].from, (* edges)[i].to, (EdgeInfo)(* edges)[i]);
             
             // Add its weight to the total weight.
             result += (* edges)[i].weight;
