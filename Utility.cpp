@@ -45,4 +45,10 @@ namespace utility
     { 
         return (!IsGreater(self, other, _compare)); 
     }
+
+    template <typename T>
+    inline T Max(T self, T other) {  return IsGreater(self, other) ? self : other; }
+
+    template <typename T>
+    inline T Min(T self, T other) {  return IsLower(self, other) ? self : other; }
 }
