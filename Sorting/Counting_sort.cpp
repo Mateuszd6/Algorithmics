@@ -15,71 +15,74 @@ Notes:
 
 #define COUNTING_SORT_GET_INDEX(VAL) ((use_get_index_with_info) ? GetIndexWithInfo(VAL, AditionalGetIndexInfo) : GetIndex(VAL)) 
 
-template <typename T>
-void _countingSort(T *array, int size, int(*GetIndex)(T), int(*GetIndexWithInfo)(T, void*), 
-    void *AditionalGetIndexInfo)
+namespace detail
 {
-    bool use_get_index_with_info = (GetIndexWithInfo != NULL);
-
-    // Search the array and find largest and lowest indexes.
-    int max_index = COUNTING_SORT_GET_INDEX(array[0]);
-    int min_index = COUNTING_SORT_GET_INDEX(array[0]);
-    for (int i = 0; i < size; ++i)
+    template <typename T>
+    void CountingSort(T *array, int size, int(*GetIndex)(T), int(*GetIndexWithInfo)(T, void*), 
+        void *AditionalGetIndexInfo)
     {
-        int index = COUNTING_SORT_GET_INDEX(array[i]);
-        if (max_index < index)
-            max_index = index;
-        if (min_index > index)
-            min_index = index;
+        bool use_get_index_with_info = (GetIndexWithInfo != NULL);
+
+        // Search the array and find largest and lowest indexes.
+        int max_index = COUNTING_SORT_GET_INDEX(array[0]);
+        int min_index = COUNTING_SORT_GET_INDEX(array[0]);
+        for (int i = 0; i < size; ++i)
+        {
+            int index = COUNTING_SORT_GET_INDEX(array[i]);
+            if (max_index < index)
+                max_index = index;
+            if (min_index > index)
+                min_index = index;
+        }
+
+        // Data range is a difference between greates and lowest indexes.
+        int data_range = max_index - min_index + 1;
+
+        // Array used to store result.
+        T *result = new T[size];
+
+        // Temporary array to store indexes.
+        int *tmp = new int[data_range+1]();
+        
+        // After this loop tmp[i] will contain number of elements that GetIndex
+        // will return i - min_index;
+        for (int i = 0; i < size; ++i)
+            tmp[COUNTING_SORT_GET_INDEX(array[i])-min_index]++;
+        
+        // After this loop tmp[i] will contain number of elements that GetIndex 
+        // will return less or equal i - min_index.
+        for (int i = 1; i <= data_range; ++i)
+            tmp[i] += tmp[i-1];
+        
+        // Iterate backwards over the input array (backward iteration is used to keep sort stable).
+        for (int i = size-1; i >= 0; --i)
+        {
+            // Use the index calcuated to indicate the new index of the element.
+            result[tmp[COUNTING_SORT_GET_INDEX(array[i])-min_index]-1] = array[i];
+
+            // Decrement the index by one.
+            tmp[COUNTING_SORT_GET_INDEX(array[i])-min_index]--;
+        }
+        
+        // Copy array used to store result to the input array.
+        memcpy(array, result, size*sizeof(T));
+
+        // Delete allocated arrays.
+        delete[] result;
+        delete[] tmp;
     }
-
-    // Data range is a difference between greates and lowest indexes.
-    int data_range = max_index - min_index + 1;
-
-    // Array used to store result.
-    T *result = new T[size];
-
-    // Temporary array to store indexes.
-    int *tmp = new int[data_range+1]();
-    
-    // After this loop tmp[i] will contain number of elements that GetIndex
-    // will return i - min_index;
-    for (int i = 0; i < size; ++i)
-        tmp[COUNTING_SORT_GET_INDEX(array[i])-min_index]++;
-    
-    // After this loop tmp[i] will contain number of elements that GetIndex 
-    // will return less or equal i - min_index.
-    for (int i = 1; i <= data_range; ++i)
-        tmp[i] += tmp[i-1];
-    
-    // Iterate backwards over the input array (backward iteration is used to keep sort stable).
-    for (int i = size-1; i >= 0; --i)
-    {
-        // Use the index calcuated to indicate the new index of the element.
-        result[tmp[COUNTING_SORT_GET_INDEX(array[i])-min_index]-1] = array[i];
-
-        // Decrement the index by one.
-        tmp[COUNTING_SORT_GET_INDEX(array[i])-min_index]--;
-    }
-    
-    // Copy array used to store result to the input array.
-    memcpy(array, result, size*sizeof(T));
-
-    // Delete allocated arrays.
-    delete[] result;
-    delete[] tmp;
 }
 
 template <typename T>
 void CountingSort(T *array, int size, int(*GetIndex)(T))
 {
-    _countingSort(array, size, GetIndex, (int(*)(T, void*))NULL, NULL);
+    detail::CountingSort(array, size, GetIndex, (int(*)(T, void*))NULL, NULL);
 }
 
 template <typename T>
 void CountingSort(T *array, int size, int(*GetIndexWithInfo)(T, void*), void *AditionalInfo)
 {
-    _countingSort(array, size, (int(*)(T))NULL, GetIndexWithInfo, AditionalInfo);
+    detail::CountingSort(array, size, (int(*)(T))NULL, GetIndexWithInfo, AditionalInfo);
 }
 
 /*

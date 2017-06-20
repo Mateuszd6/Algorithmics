@@ -6,7 +6,7 @@ Description: Find articulation points, bridges and biconnected components in the
              Time complexity: O(E+V). Space complexity: O(E+V).
 Notes:
        * This works only for undirected graph as all problems refere to these type of graphs.
-       * All algorithms use low function calculated by _dfsSetLowFunction method.
+       * All algorithms use low function calculated by SetLowFunction method.
        * Time and space complexity is same for every algorithm.
 ===============================================================================*/
 
@@ -16,33 +16,36 @@ Notes:
 #include <unordered_map> // TODO: Implement myself.
 #include "..\Utility.cpp"
 
-// Assing pre order and low values for every vertex in a connected component of a given graph.
-template <class VertexInfo, class EdgeInfo>
-void _dfsSetLowFunction (Graph<VertexInfo, EdgeInfo> &graph, int current, int from, int &time, int* pre_ord, int* low)
+namespace detail
 {
-    // Assing pre oder value and increment time variable;
-    pre_ord[current] = time++;
-
-    // Default low value is equal to the pre_order time of the vertex.
-    low[current] = pre_ord[current];
-
-    // Iterate current node neighbours...
-    for (int i = 0; i < graph[current].edges.size(); ++i)
+    // Assing pre order and low values for every vertex in a connected component of a given graph.
+    template <class VertexInfo, class EdgeInfo>
+    void SetLowFunction (Graph<VertexInfo, EdgeInfo> &graph, int current, int from, int &time, int* pre_ord, int* low)
     {
-        // Ignore DFS parent node.
-        if (graph[current].edges[i].to == from)
-            continue;
+        // Assing pre oder value and increment time variable;
+        pre_ord[current] = time++;
 
-        // If the node is already visited update low value.
-        if (pre_ord[graph[current].edges[i].to] != 0)
+        // Default low value is equal to the pre_order time of the vertex.
+        low[current] = pre_ord[current];
+
+        // Iterate current node neighbours...
+        for (int i = 0; i < graph[current].edges.size(); ++i)
         {
-            low[current] = utility::Min(low[current], pre_ord[graph[current].edges[i].to]);
-            continue;
-        }
+            // Ignore DFS parent node.
+            if (graph[current].edges[i].to == from)
+                continue;
 
-        // If not visited yet, call the function recursively and upadte low value.
-        _dfsSetLowFunction (graph, graph[current].edges[i].to, current, time, pre_ord, low);
-        low[current] = utility::Min(low[current], low[graph[current].edges[i].to]);
+            // If the node is already visited update low value.
+            if (pre_ord[graph[current].edges[i].to] != 0)
+            {
+                low[current] = utility::Min(low[current], pre_ord[graph[current].edges[i].to]);
+                continue;
+            }
+
+            // If not visited yet, call the function recursively and upadte low value.
+            SetLowFunction (graph, graph[current].edges[i].to, current, time, pre_ord, low);
+            low[current] = utility::Min(low[current], low[graph[current].edges[i].to]);
+        }
     }
 }
 
@@ -77,7 +80,7 @@ std::vector <int> *GetArticulationPoints(Graph<VertexInfo, EdgeInfo> &graph)
             is_root[i] = true;
 
             // Call DFS function on the root.
-            _dfsSetLowFunction(graph, i, -1, time, pre_order, low);
+            detail::SetLowFunction(graph, i, -1, time, pre_order, low);
             
             // If there are two childs with different low values 
             // this node is an articulation point. 
@@ -141,7 +144,7 @@ std::vector <typename Graph<VertexInfo, EdgeInfo> :: Edge> *GetBridges(Graph<Ver
         // If vertex is not explored yet...
         if (pre_order[i] == 0)
             // Call DFS function on the root.
-            _dfsSetLowFunction(graph, i, -1, time, pre_order, low);
+            detail::SetLowFunction(graph, i, -1, time, pre_order, low);
 
     // Iterate over every edge in the graph
     for (int i = 0; i < graph.Size(); ++i)
@@ -184,7 +187,7 @@ std::vector < std::vector < typename Graph<VertexInfo, EdgeInfo> :: Edge > *> *G
         // If vertex is not explored yet...
         if (pre_order[i] == 0)
             // Call DFS function on the root.
-            _dfsSetLowFunction(graph, i, -1, time, pre_order, low);
+            detail::SetLowFunction(graph, i, -1, time, pre_order, low);
 
     // Map to store low value into an index in the result array.
     std::unordered_map<int, int> *low_to_index = new std::unordered_map<int,int>();

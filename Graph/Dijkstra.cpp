@@ -15,25 +15,28 @@ Notes:
 #include "Graph.cpp"
 #include "..\Data_structures\Binary_heap.cpp"
 
-// Class used by binary heap used to store info about which vertex is reachable with which cost.
-// On the top of the priority queue there is always vertex with lowest reach cost.
-// Only operator < is used by this data strucutre.
-class DijkstraQueueNode
+namespace detail
 {
-public:
-	int reached_from;
-	int vertex;
-	int cost;
-
-	DijkstraQueueNode () {}
-	DijkstraQueueNode(int reached_from, int vertex, int cost) : 
-		reached_from(reached_from), vertex(vertex), cost(cost) {}
-
-	inline bool operator < (DijkstraQueueNode &other)
+	// Class used by binary heap used to store info about which vertex is reachable with which cost.
+	// On the top of the priority queue there is always vertex with lowest reach cost.
+	// Only operator < is used by this data strucutre.
+	class DijkstraQueueNode
 	{
-		return cost < other.cost;
-	}
-};
+	public:
+		int reached_from;
+		int vertex;
+		int cost;
+
+		DijkstraQueueNode () {}
+		DijkstraQueueNode(int reached_from, int vertex, int cost) : 
+			reached_from(reached_from), vertex(vertex), cost(cost) {}
+
+		inline bool operator < (DijkstraQueueNode &other)
+		{
+			return cost < other.cost;
+		}
+	};
+}
 
 // Returns a pointer to an array filled with cost of achieving given vertex. Cost of source is 0.
 // Cost equal -1 means that vertex is not reachable through the source.
@@ -63,20 +66,20 @@ int *DijkstraShortestPathTree(Graph<VertexInfo, EdgeInfo> &graph,
 	for (int i = 0; i < graph.Size(); ++i) result[i] = -1;
 
 	// Inicialize the binary heap used as priorittty queue.
-	BinaryHeap <DijkstraQueueNode> *heap = new BinaryHeap <DijkstraQueueNode>(minHeap);
+	BinaryHeap <detail::DijkstraQueueNode> *heap = new BinaryHeap <detail::DijkstraQueueNode>(minHeap);
 
 	// Set bool indicating wheter or not parent map has to be filled.
 	bool fill_parent_map = (parent_map != NULL);
 	
 	// Inicialize by passing the source vertex to the queue reached by nothing 
 	// (-1 means no parent in the shortest-paths-tree).
-	heap->Push(DijkstraQueueNode(-1, source, 0));
+	heap->Push(detail::DijkstraQueueNode(-1, source, 0));
 
 	// While there are still vertexes in prioritty queue...
 	while (!heap->Empty())
 	{
 		// Take vertex with a best cost from heap, and pop it.
-		DijkstraQueueNode heapTop = heap->Top();
+		detail::DijkstraQueueNode heapTop = heap->Top();
 		heap->Pop();
 
 		// If it is already visited ignore and continue the while loop.
@@ -99,7 +102,7 @@ int *DijkstraShortestPathTree(Graph<VertexInfo, EdgeInfo> &graph,
 			if (!visited[graph[heapTop.vertex].edges[i].to])
 			{
 				// Add it into the queue with cost of comming here + new edge cost:
-				heap->Push(DijkstraQueueNode(heapTop.vertex, graph[heapTop.vertex].edges[i].to,
+				heap->Push(detail::DijkstraQueueNode(heapTop.vertex, graph[heapTop.vertex].edges[i].to,
 					heapTop.cost + static_cast<DistanceEdge>(graph[heapTop.vertex].edges[i]).weight));
 			}
 	}

@@ -23,6 +23,7 @@ Notes:
 
 #include <iostream>
 #include <vector>
+#include "..\Utility.cpp"
 
 // Enum used to determine heap type. maxHeap is a heap with greatest element on the top, and minHeap
 // is a heap with lowest element on the top.
@@ -43,24 +44,19 @@ private:
 	// The type of the heap.
 	HeapType heapType;
 
-	// Inline functions used to get indexs of the parent and childs of the vertex.
-	inline int Parent(int v) { return v / 2; }
-	inline int LeftChild(int v) { return v * 2; }
-	inline int RightChild(int v) { return v * 2 + 1; }
-
-	// Funcions used for comparing objects. Only < operator is used for comparation.
-	inline bool Lower(T self, T other) { return self < other; }
-	inline bool Equal(T self, T other) { return (!(self < other) && !(other < self)); }
-	inline bool Greater(T self, T other) { return (!Equal(self, other) && !(self < other)); }
+	// Functions used to get indexs of the parent and childs of the vertex.
+	int Parent(int v) { return v / 2; }
+	int LeftChild(int v) { return v * 2; }
+	int RightChild(int v) { return v * 2 + 1; }
 
 	// Function used by the heap operations used for comparing. Return value depends on the selected heap type.
 	// True is first element has higher priority over the second one.
-	inline bool HigherPriority(T self, T other)
+	bool HigherPriority(T self, T other)
 	{
 		if (heapType == maxHeap)
-			return Greater(self, other);
+			return utility::IsGreater(self, other);
 		else if (heapType == minHeap)
-			return Lower(self, other);
+			return utility::IsLower(self, other);
 		// This should never happen unless more HeapTypes are addded
 		else
 		{
@@ -71,13 +67,13 @@ private:
 
 public:
 	// Returns the size of the heap, which is the number of elements currently in the container.
-	inline std::size_t Size() { return heap.size() - 1; }
+	std::size_t Size() { return heap.size() - 1; }
 
 	// Returns the capacity of the heap.
-	inline int Capacity() { return heap.capacity(); } 
+	int Capacity() { return heap.capacity(); } 
 
 	// Returns the max size of the heap.
-	inline long long MaxSize() { return heap.max_size(); }
+	long long MaxSize() { return heap.max_size(); }
 	
 	// Returns the type of the heap.
 	HeapType Type() { return heapType; }
@@ -217,7 +213,7 @@ private:
 	}
 
 	// Iterate over heap nodes and set nodes that the heap rule is restricted.
-	inline void BuildHeap()
+	void BuildHeap()
 	{
 		for (int i = (int)heap.size() - 1; i >= 1; --i)
 			Heapify(i);

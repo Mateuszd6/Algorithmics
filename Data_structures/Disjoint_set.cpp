@@ -25,26 +25,29 @@ Notes:
 #include <iostream>
 #include <vector>
 
-struct DisjointSetNode
+namespace detail
 {
-    int id;
-    int parent;
-    int rank;
-
-    DisjointSetNode() {}
-    DisjointSetNode(int node_id)
+    struct DisjointSetNode
     {
-        id = node_id;
-        parent = node_id;
-        rank = 1;
-    }
-};
+        int id;
+        int parent;
+        int rank;
+
+        DisjointSetNode() {}
+        DisjointSetNode(int node_id)
+        {
+            id = node_id;
+            parent = node_id;
+            rank = 1;
+        }
+    };
+}
 
 class DisjointSetArray
 {
 private:
     // Vector of the DisjointSetNode. Used instead of array, giving user an ability to resize by adding new nodes.
-    std::vector <DisjointSetNode> nodes;
+    std::vector <detail::DisjointSetNode> nodes;
 
     // Vector used to write a traverse path when path compression algorithm is applied.
     std::vector < int > compressed_path;
@@ -86,7 +89,7 @@ public:
     inline bool Empty() { return nodes.empty(); }
 
     // Add new node to the vector.
-    inline void Add() { nodes.push_back(DisjointSetNode(nodes.size())); }
+    inline void Add() { nodes.push_back(detail::DisjointSetNode(nodes.size())); }
 
     // Find a representation of the set that contains the node with given ID.
     int Find (int id) { return GetParent(id); }
@@ -118,13 +121,13 @@ public:
 		// Default constructor. Creates an empty array.
     DisjointSetArray ()
     {
-        nodes = std::vector<DisjointSetNode>(0);
+        nodes = std::vector<detail::DisjointSetNode>(0);
     }
     
     // Copy constructor.
     DisjointSetArray(const DisjointSetArray &other)
     {
-        nodes = std::vector<DisjointSetNode>(other.nodes.size());
+        nodes = std::vector<detail::DisjointSetNode>(other.nodes.size());
         for (int i = 0; i < nodes.size(); ++i)
             nodes[i] = other.nodes[i];
     }
@@ -132,7 +135,7 @@ public:
     // Constructor used to create an array contains size nodes (with IDs from 0 to size-1).
     DisjointSetArray (int size)
     {
-        nodes = std::vector<DisjointSetNode>(size);
+        nodes = std::vector<detail::DisjointSetNode>(size);
         for (int i = 0; i < size; ++i)
         {
             // Manually assing the values for each node. Id is basicly an index, parent is same as id at start.

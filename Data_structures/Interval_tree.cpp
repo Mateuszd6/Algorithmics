@@ -61,16 +61,16 @@ private:
     int size;
 
     // Get the parent of the node with given ID.
-    inline int Parent(int v) { return (v/2); }
+    int Parent(int v) { return (v/2); }
 
     // Get the left child of the node with given ID.
-    inline int LeftChild(int v) { return (2*v); }
+    int LeftChild(int v) { return (2*v); }
 
     // Get the right child of the node with given ID.
-    inline int RightChild(int v) { return (2*v + 1); }
+    int RightChild(int v) { return (2*v + 1); }
     
     // True if node with given ID is a leaf.
-    inline bool IsLeaf(int v) { return (v >= size); }
+    bool IsLeaf(int v) { return (v >= size); }
 
     // Recursive function to call query in a given node.
     // NOTE: subtree_range is number of nodes in the queried interval in the subtree of current node.

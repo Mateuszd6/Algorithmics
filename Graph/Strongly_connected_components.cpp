@@ -13,35 +13,38 @@ Notes:
 #include <vector>
 #include "Graph.cpp"
 
-// Traverse the graph if depth-first way and push every fully explored vertex to the post_order vector.
-template <class VertexInfo, class EdgeInfo>
-void DFSNumeratePostOrder(int current, Graph<VertexInfo, EdgeInfo> &graph, 
-    std::vector<int> *post_order, bool * visited)
-{    
-    visited[current] = true;
-
-    for (int j = 0; j < graph[current].edges.size(); ++j)
-        if (!visited[graph[current].edges[j].to])
-            DFSNumeratePostOrder(graph[current].edges[j].to, graph, post_order, visited);
-
-    // Put the vertex at the end of the post_order vector.
-    post_order->push_back(current);
-}
-
-// Used to traverse reversed graph. Every vertex that is reachable from the source vertex will be 
-// in one strongly connected component.
-template <class VertexInfo, class EdgeInfo>
-void DFSPutIntoSCC(int current, Graph<VertexInfo, EdgeInfo> &graph,
-    std::vector<int> *current_scc, bool *visited)
+namespace detail
 {
-    visited[current] = true;
+    // Traverse the graph if depth-first way and push every fully explored vertex to the post_order vector.
+    template <class VertexInfo, class EdgeInfo>
+    void DFSNumeratePostOrder(int current, Graph<VertexInfo, EdgeInfo> &graph, 
+        std::vector<int> *post_order, bool * visited)
+    {    
+        visited[current] = true;
 
-    // Add the vertex tto the strongly connected components vector.
-    current_scc->push_back(current);
-    
-    for (int j = 0; j < graph[current].edges.size(); ++j)
-        if (!visited[graph[current].edges[j].to])
-            DFSPutIntoSCC(graph[current].edges[j].to, graph, current_scc, visited);
+        for (int j = 0; j < graph[current].edges.size(); ++j)
+            if (!visited[graph[current].edges[j].to])
+                DFSNumeratePostOrder(graph[current].edges[j].to, graph, post_order, visited);
+
+        // Put the vertex at the end of the post_order vector.
+        post_order->push_back(current);
+    }
+
+    // Used to traverse reversed graph. Every vertex that is reachable from the source vertex will be 
+    // in one strongly connected component.
+    template <class VertexInfo, class EdgeInfo>
+    void DFSPutIntoSCC(int current, Graph<VertexInfo, EdgeInfo> &graph,
+        std::vector<int> *current_scc, bool *visited)
+    {
+        visited[current] = true;
+
+        // Add the vertex tto the strongly connected components vector.
+        current_scc->push_back(current);
+        
+        for (int j = 0; j < graph[current].edges.size(); ++j)
+            if (!visited[graph[current].edges[j].to])
+                DFSPutIntoSCC(graph[current].edges[j].to, graph, current_scc, visited);
+    }
 }
 
 // Given a graph return a vector of the vectors, each containing vertices of one
@@ -66,7 +69,7 @@ std::vector<std::vector<int>*> *StronglyConnectedComponents(Graph<VertexInfo, Ed
         // If vertex is not visited yet...
         if (!visited[i])
             // Traverse the graph in depth-first order and put vertex into post_order vector.
-            DFSNumeratePostOrder(i, graph, post_ord, visited);
+            detail::DFSNumeratePostOrder(i, graph, post_ord, visited);
         
     // Clear visited array.
     for (int i = 0; i < graph.Size(); ++i)
@@ -84,7 +87,7 @@ std::vector<std::vector<int>*> *StronglyConnectedComponents(Graph<VertexInfo, Ed
              result->push_back(new std::vector<int>);
 
             // All vertices reached form current vertex are in the same component.
-            DFSPutIntoSCC((* post_ord)[i], graph, result->back(), visited);
+            detail::DFSPutIntoSCC((* post_ord)[i], graph, result->back(), visited);
 
             for (int i = 0; i < result->back()->size(); ++i)
                 std::cout << (* result->back())[i] << " ";
