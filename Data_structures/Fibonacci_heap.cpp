@@ -15,8 +15,7 @@ Operations:
 	  * MaxSize - returns maximum capacity of the heap. Time complexity: O(1).
 	  * Type - returns the type of the heap (maxHeap / minHeap). Time complexity: O(1).
 	  * Empty - returns true if there is no element in heap. Time complexity: O(1).
-	  * ChangeType - changes the type of the heap (form maxHeap to minHeap or vice versa) and rebuilds it. Time complexity: O(n*log(n)).
-      * Union - merge two heaps into one. Time complexity: O(1).
+	  * ChangeType - changes the type of the heap (form maxHeap to minHeap or vice versa) and rebuilds it. Time complexity: O(n).
 Notes:
 	  * 
 	  * Only operator that has to be implemented is '<'. Every comparation is used only with this operator.
@@ -41,10 +40,12 @@ class FibonacciHeap
     private:
         struct Node
         {
-            T item;
+            T value;
             std::vector <int> childs;
 
-            Node (T item) : item(item) {}
+            Node (T value) : value(value) {}
+
+            int Degree() { return childs.size(); }
         };
 
         // Function used by the heap operations used for comparing. Return value depends on the selected heap type.
@@ -74,18 +75,90 @@ class FibonacciHeap
         std::vector <int> mainNodes;
 
         // Top value of the heap.
-        T currentTopValue;
+        int currentTopNodeIndex;
 
         // The size of the heap.
         int heapSize;
 
+        // Max degree of the node in the heap which is log_2(heapSize).
+        int maxDegree;
+
+        // Set the heap size and update maxDegree value.
+        void SetHeapSize(int newSize)
+        {
+            heapSize = newSize;
+
+            // Oldest bit is equal to log_2(newSize)+1.
+            maxDegree = utility::GetHighestBit(newSize) + 2;
+        }
+
         // The type of the heap.
         HeapType heapType;
 
+        // Called after Pop operation organizes root nodes and their heaps in sucha a way,
+        // there are no roots with the same degree.
+        void FixHeap()
+        {   
+            // Array contains root indexes. A[i] constains root with degree equal to i.
+            // When value is equal to -1 it means there is no such root found yet.
+            int *A = new int[maxDegree];
+
+            for (int i = 0; i < maxDegree; ++i)
+                A[i] = -1;
+
+            // Iterate over root nodes...
+            for (int i = 0; i < mainNodes.size(); ++i)
+            {
+                int currentNodeIndex = i;
+
+                // Search for other node with same degree and merge with current if found.
+                while (A[nodes[mainNodes[currentNodeIndex]]->Degree()] != -1)
+                {
+                    int otherNodeIndex = A[nodes[mainNodes[currentNodeIndex]]->Degree()];
+                    if (HigherPriority(nodes[mainNodes[otherNodeIndex]]->value, nodes[mainNodes[currentNodeIndex]]->value))
+                        std::swap(mainNodes[currentNodeIndex], mainNodes[otherNodeIndex]);
+
+                    // assert(otherNodeIndex < currentNodeIndex);
+
+                    A[nodes[mainNodes[currentNodeIndex]]->Degree()] = -1;
+                    nodes[mainNodes[currentNodeIndex]]->childs.push_back(mainNodes[otherNodeIndex]);
+                }
+                A[nodes[mainNodes[currentNodeIndex]]->Degree()] = currentNodeIndex;
+            }
+
+            // Create new mainNodes array based on a previous one and A array.
+            bool topValueWasSet = false;
+            for (int i = 0; i < maxDegree; ++i)
+            {
+                if (A[i] != -1)
+                    A[i] = mainNodes[A[i]];
+            }
+
+            mainNodes.clear();
+            for (int i = 0; i < maxDegree; ++i)
+            {
+                if (A[i] != -1)
+                {
+                    if (!topValueWasSet)
+                    {
+                        currentTopNodeIndex = mainNodes.size();
+                        topValueWasSet = true;
+                    }
+                    else if (HigherPriority(nodes[A[i]]->value, nodes[mainNodes[currentTopNodeIndex]]->value))
+                        currentTopNodeIndex = mainNodes.size();
+               
+                    mainNodes.push_back(A[i]);
+                }
+            }
+
+            delete[] A;
+
+        }
+
     public:
-        FibonacciHeap() 
+        FibonacciHeap(HeapType heapType) : heapType(heapType) 
         {
-            heapSize = 0;
+            SetHeapSize(0);
         }
 
 	    // Add an element to the set.
@@ -103,64 +176,77 @@ class FibonacciHeap
             else
             {
                 createdNodeIndex = freeIndexes.back();
-                nodes[createdNodeIndex] = createdNode;
                 freeIndexes.pop_back();
+                nodes[createdNodeIndex] = createdNode;
             }
 
             // Put a node into main nodes panel, because it does not have a parent yet.
             mainNodes.push_back(createdNodeIndex);
 
+            // If pushed element is one and only item in the heap.
+            if (mainNodes.size() == 1)
+                currentTopNodeIndex = 0;
+
             // Check if inserted value isn't better than current top value.
-            if (HigherPriority(item, currentTopValue))
-                currentTopValue = item;
+            else if (HigherPriority(item, nodes[mainNodes[currentTopNodeIndex]]->value))
+                currentTopNodeIndex = mainNodes.size()-1;
             
-            heapSize++;
+            SetHeapSize(heapSize + 1);
         }
 
     	// Remove element with the highest priority from the set.
         void Pop()
         {
-            //TODO:.
-            return;
+            if (Empty())
+                return;
+                
+            Node *topNode = nodes[mainNodes[currentTopNodeIndex]];
+            freeIndexes.push_back(mainNodes[currentTopNodeIndex]);
+            
+            std::swap(mainNodes[currentTopNodeIndex], mainNodes.back());
+            mainNodes.pop_back();
+
+
+            for (auto i : topNode->childs)
+                mainNodes.push_back(i);
+
+            FixHeap();
+
+            SetHeapSize(heapSize - 1);
         }
 
         // Retuns element with the highest priority in the heap.
-        void Top() { return currentTopValue; }
+        T Top() { return nodes[mainNodes[currentTopNodeIndex]]->value; }
 
 
         // Returns the size of the heap, which is the number of elements currently in the container.
         std::size_t Size() 
         { 
-            // TODO:.
-            return 0;
+            return (std::size_t)heapSize;
         }
 
         // Returns the capacity of the heap.
         int Capacity() 
         { 
-            // TODO:.
-            return 0;
+            return nodes.capacity;
         } 
 
         // Returns the max size of the heap.
         long long MaxSize() 
         { 
-            // TODO:.
-            return 0;
+            return nodes.max_size;
         }
         
         // Returns the type of the heap.
         HeapType Type() 
         { 
-            // TODO:.
-            return 0; 
+            return heapType; 
         }
         
         // Returns true if there is no emelent in the heap.
         bool Empty() 
         { 
-            // TODO:.
-            return false; 
+            return (Size() == 0);
         }
 
         // Change the type of the heap and rebuild it. This function is the slowest in the data strucutre, 
@@ -173,21 +259,85 @@ class FibonacciHeap
 
             // Change the type of the heap.
             heapType = newType;
-            
-            // TODO:.
-            return;
-        }
 
-        // Merge two heaps into one.
-        void Union(FibonacciHeap<T> *other)
-        {
-            TODO:.
-            return;
+            // Mark which node is obsolate, because of being removed from the heap earlier.            
+            bool *was_deleted = new bool[nodes.size()+1]();
+            for (int i = 0; i < freeIndexes.size(); ++i)
+                was_deleted[freeIndexes[i]] = true;
+
+            // Put every not-obsolate node in the main nodes list and clear their childs.
+            mainNodes.clear();
+            bool topValueWasSet = false;
+            for (int i = 0; i < nodes.size(); ++i)
+            {
+                if (!was_deleted[i])
+                {
+                    mainNodes.push_back(i);
+                    if (!topValueWasSet || HigherPriority(
+                        nodes[i]->value, nodes[mainNodes[currentTopNodeIndex]]->value))
+                        {
+                            currentTopNodeIndex = mainNodes.size()-1;
+                            topValueWasSet = true;
+                        }
+                    nodes[i]->childs.clear();
+
+                }
+            }
+
+            delete[] was_deleted;
+
+            // NOTE: There is no need to call FixHeap yet. It will be called when Pop is called.
         }
 };
 
-int main ()
-{
-    FibonacciHeap<int> *fh = new FibonacciHeap<int>();
+/*
+//============== USAGE EXAMPLE ===================
 
+int main()
+{
+    FibonacciHeap<int> *fh = new FibonacciHeap<int>(maxHeap);
+	std::cout << "Adding 12 to the heap...\n";
+    fh->Add(12);
+	std::cout << "Adding 5 to the heap...\n";
+    fh->Add(5);
+	std::cout << "Adding 4 to the heap...\n";
+    fh->Add(4);
+	std::cout << "Adding 2 to the heap...\n";
+    fh->Add(2);
+	std::cout << "Adding 8 to the heap...\n";
+    fh->Add(8);
+	std::cout << "Now greatest value is: " << fh->Top() << "\n";
+    std::cout << "Removing greatest value...\n";
+    fh->Pop();
+    fh->ChangeType(minHeap);
+    std::cout << "Changing heap type. Now highest priority has the lowest element.\n";
+    for (int i = 0; i < 2; ++i)
+    {
+	    std::cout << "Now lowest value is: " << fh->Top() << "\n";
+        std::cout << "Removing lowest value...\n";
+        fh->Pop();
+    }
+    fh->ChangeType(maxHeap);
+    std::cout << "Changing heap type. Now highest priority has the greatest element.\n";
+	std::cout << "Adding 15 to the heap...\n";
+    fh->Add(15);
+	std::cout << "Adding 20 to the heap...\n";
+    fh->Add(20);
+    while (!fh->Empty())
+    {
+        std::cout << "Now greatest value is: " << fh->Top() << "\n";
+        std::cout << "Removing greatest value...\n";
+        fh->Pop();
+    }
+    fh->Add(9);
+	std::cout << "Adding 9 to the heap...\n";
+    fh->Add(11);
+	std::cout << "Adding 11 to the heap...\n";
+    while (!fh->Empty())
+    {
+        std::cout << "Now greatest value is: " << fh->Top() << "\n";
+        std::cout << "Removing greatest value...\n";
+        fh->Pop();
+    }
 }
+*/
