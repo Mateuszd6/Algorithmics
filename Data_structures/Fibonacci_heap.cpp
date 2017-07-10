@@ -19,7 +19,7 @@ Notes:
 	  * All the work of maitaining the heap strucure is done in Pop method.
 	  * Only operator that has to be implemented is '<'. Every comparation is used only with this operator.
 	  * In every case works faster than std::priority_queue, in most cases works faster than binary heap.
-      * Specially effective when there are less Pop operations that Push.
+	  * Specially effective when there are less Pop operations that Push.
 ===============================================================================*/
 
 #include <iostream>
