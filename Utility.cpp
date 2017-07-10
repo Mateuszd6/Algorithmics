@@ -51,4 +51,15 @@ namespace utility
 
     template <typename T>
     inline T Min(T self, T other) {  return IsLower(self, other) ? self : other; }
+
+    inline int GetHighestBit (int n)
+    {
+        int res = 0;
+        while (n)
+        {
+            n >>= 1;
+            ++res;
+        }    
+        return res;
+    }
 }
