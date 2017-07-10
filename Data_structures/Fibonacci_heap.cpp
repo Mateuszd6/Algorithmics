@@ -2,7 +2,7 @@
 Author: Mateusz Dudziński.
 Email: mateuszpd7@gmail.com
 Full Repository: github.com/Mateuszd6/Algorithmics
-Description: Binary heap data structure. Used as a priority queue.
+Description: Fibonacci heap data structure. Used as a priority queue.
              Always gives the greatest element in the set, uses < operator only.
              Space complexity: O(n).
 Operations:
@@ -16,9 +16,10 @@ Operations:
 	  * Empty - returns true if there is no element in heap. Time complexity: O(1).
 	  * ChangeType - changes the type of the heap (form maxHeap to minHeap or vice versa) and rebuilds it. Time complexity: O(n).
 Notes:
-	  * 
+	  * All the work of maitaining the heap strucure is done in Pop method.
 	  * Only operator that has to be implemented is '<'. Every comparation is used only with this operator.
-	  * In most cases it works much faster than std::proprity_queue.
+	  * In every case works faster than std::priority_queue, in most cases works faster than binary heap.
+      * Specially effective when there are less Pop operations that Push.
 ===============================================================================*/
 
 #include <iostream>
