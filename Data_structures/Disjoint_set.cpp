@@ -87,7 +87,7 @@ public:
 
     // Returns true is data strucutre is empty.
     inline bool Empty() { return nodes.empty(); }
-
+    
     // Add new node to the vector.
     inline void Add() { nodes.push_back(detail::DisjointSetNode(nodes.size())); }
 
@@ -171,7 +171,7 @@ int main ()
     arr->Add();
     std::cout << "Merging 8 and 2...\n";
     arr->Merge(8, 2);
-    std::cout << "Find(8) = " << arr->Find(8) << ".\n";
+    std::cout << "Find(8) = " << arr->Find(8) << ".\n";    
     //Output:
     //  Creating disjoint set array with 8 elements...
     //  Merging 1 and 2...
