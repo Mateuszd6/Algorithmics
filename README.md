@@ -13,6 +13,7 @@
   - Binary_heap.cpp (Binary heap data structure)
   - Fibonacci_heap.cpp (Fibonacci heap data strucutre)
   - Interval_tree.cpp (Interval tree data structure)
+  - Trie.cpp (trie tree data structure)
   - Disjoint_set.cpp (Disjoint-set array, also known as Find & Union data structure)
 + ### Sorting algorithms:
   - Counting_sort.cpp 
