@@ -15,6 +15,7 @@
   - Interval_tree.cpp (Interval tree data structure)
   - Trie.cpp (trie tree data structure)
   - Disjoint_set.cpp (Disjoint-set array, also known as Find & Union data structure)
+  - K_max_queue.cpp (K-max queue data structure)
 + ### Sorting algorithms:
   - Counting_sort.cpp 
   - Insertion_sort.cpp 
