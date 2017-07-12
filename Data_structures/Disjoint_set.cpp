@@ -116,9 +116,9 @@ public:
     }
 
     // Clear the array.
-    void Clear() { nodes.clear(); }
+    void Clear() { nodes.clear(); } 
 
-		// Default constructor. Creates an empty array.
+    // Default constructor. Creates an empty array.
     DisjointSetArray ()
     {
         nodes = std::vector<detail::DisjointSetNode>(0);
