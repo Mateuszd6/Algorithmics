@@ -61,6 +61,45 @@ private:
 	// Pointer to the array of vertices.
 	Vertex *vertices;
 
+	// Used by IsAcyclic() DFS method for undirected graphs.
+	bool DFSUndirectedAcyclic(int current, bool* visited)
+    {
+        visited[current] = true;
+
+        for (int j = 0; j < (* this)[current].edges.size(); ++j)
+        {
+            if (visited[(* this)[current].edges[j].to])
+                return false;
+
+            if (!DFSUndirectedAcyclic((* this)[current].edges[j].to, visited))
+                return false;
+        }
+
+        return true;
+    }
+
+	// Used by IsAcyclic() DFS method for directed graphs.
+	bool DFSDirectedAcyclic(int current, int* state)
+	{
+		state[current] = 1;
+		
+        for (int j = 0; j < (* this)[current].edges.size(); ++j)
+        {
+            if (state[(* this)[current].edges[j].to] == 1)
+                return false;
+            
+			if (state[(* this)[current].edges[j].to] != 0)
+				continue;
+				
+            if (!DFSDirectedAcyclic((* this)[current].edges[j].to, state))
+                return false;
+        }
+
+		state[current] =  2;
+
+		return true;
+	}
+
 public:
 	// Returns the list (std::vector here) of edges comming out from given vertex. 
 	// Idx must be less than the graph size.
@@ -115,6 +154,43 @@ public:
 	
 		// delete the old array of vertices.
 		delete[] verticesOfReversedGraph;
+	}
+
+	// Returns true if  graph is acyclic 
+	bool IsAcyclic ()
+	{
+		if (Size() == 0)
+			return true;
+		
+		if (Type() == undirected)
+		{
+			bool *visited = new bool[Size()]();
+			
+			bool result = true;
+			for (int i = 0; i < Size(); ++i)
+				if (!visited[i] && !DFSUndirectedAcyclic(0, visited))
+					result = false;
+			
+			delete[] visited;
+			return result;
+		}
+		else if (Type() == directed)
+		{
+			int *state = new int[Size()]();
+
+			bool result = true;
+			for (int i = 0 ; i < Size(); ++i)
+				if (state[i] == 0 && !DFSDirectedAcyclic(0, state))
+					result = false;
+
+			delete[] state;
+			return result;
+		}
+		else
+		{
+			std::cerr << "Unrecognized graph type.";
+			return false;
+		}
 	}
 
 	// Graph constructor, specify size and type (directed/undirected).
