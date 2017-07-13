@@ -6,6 +6,7 @@
   - BFS.cpp (BFS algorithm)
   - DFS.cpp (DFS algorithm)
   - Dijkstra.cpp (Dijkstra's algorithm)
+  - Topological_sort.cpp (Topological sort algorithm)
   - Minimal_spannig_tree.cpp (Kruskal's algorithm for finding minimal spannig tree)
   - Strongly_connected_components.cpp (Kosaraju's algorithm for finding strongly connected components)
   - Biconnected_components.cpp (Algorithms for finding articulation points, bridges and biconnected components)
