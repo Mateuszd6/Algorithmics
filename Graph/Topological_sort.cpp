@@ -38,8 +38,8 @@ template <class VertexInfo, class EdgeInfo>
 int *TopologicalSort(Graph<VertexInfo, EdgeInfo> &graph)
 {
     // Topological sort is a problem related to directed, acyclic graphs.
-    assert(graph.Type() == directed);
-    assert(graph.IsAcyclic());
+    // assert(graph.Type() == directed);
+    // assert(graph.IsAcyclic());
 
     if (graph.Size() == 0)
         return NULL;
@@ -59,7 +59,7 @@ int *TopologicalSort(Graph<VertexInfo, EdgeInfo> &graph)
     
     // Exit time started from graph.Size()-1, and was decremented by one for every vertex in the graph.
     // This assertion basically checks if every vertex as properly written to the output array.
-    assert(exitTime == -1);
+    // assert(exitTime == -1);
 
     delete[] visited;
     return result;
