@@ -5,6 +5,7 @@
   - Graph.cpp (base graph class)
   - BFS.cpp (BFS algorithm)
   - DFS.cpp (DFS algorithm)
+  - Euler_cycle.cpp (Algorithm for finding Euler cycle)
   - Dijkstra.cpp (Dijkstra's algorithm)
   - Topological_sort.cpp (Topological sort algorithm)
   - Minimal_spannig_tree.cpp (Kruskal's algorithm for finding minimal spannig tree)
