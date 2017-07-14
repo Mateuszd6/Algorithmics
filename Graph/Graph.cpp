@@ -36,6 +36,7 @@ public:
 
 		Edge() {} 
 		Edge(EdgeInfo base_edge, int from, int to) : EdgeInfo(base_edge), from(from), to(to) {}
+		Edge(Edge &other) : EdgeInfo((EdgeInfo)other), from(other.from), to(other.to) {}
 	};
 
 	struct Vertex : VertexInfo
@@ -207,6 +208,19 @@ public:
 		this->size = graph_size;
 		this->vertices = new Vertex[graph_size];
 		// TODO: Should user be able to inicialize all the values with the given array of the vertex infos
+	}
+
+	// Graph copy constructor.
+	Graph(Graph &other)
+	{
+		graph_type = other.Type();
+		size = other.Size();
+		Vertex *newVertex = new Vertex[other.Size()];
+		vertices = newVertex;
+		for (int i = 0; i < size; ++i)
+			for (int j = 0; j < other[i].edges.size(); ++j)
+				vertices[i].edges.push_back(Edge(other[i].edges[j]));
+		
 	}
 
 	// Graph destructor.
