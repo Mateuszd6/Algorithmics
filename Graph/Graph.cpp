@@ -207,7 +207,7 @@ public:
 		}
 		this->size = graph_size;
 		this->vertices = new Vertex[graph_size];
-		// TODO: Should user be able to inicialize all the values with the given array of the vertex infos
+		// TODO: Should user be able to inicialize all the values with the given array of the vertex infos?
 	}
 
 	// Graph copy constructor.
@@ -263,4 +263,16 @@ public:
 	{
 		return weight < other.weight;
 	}
+};
+
+// Class for additional edge info contains info about the edge capacity and flow and is used by 
+// residual-network algorithms.
+class ResidualEdge
+{
+	public:	
+		// Max flow value that the edge can transport
+		int capacity;
+
+	ResidualEdge () {}
+	ResidualEdge (int capacity) : capacity(capacity) {}
 };
