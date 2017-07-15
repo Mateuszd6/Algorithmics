@@ -11,6 +11,7 @@
   - Minimal_spannig_tree.cpp (Kruskal's algorithm for finding minimal spannig tree)
   - Strongly_connected_components.cpp (Kosaraju's algorithm for finding strongly connected components)
   - Biconnected_components.cpp (Algorithms for finding articulation points, bridges and biconnected components)
+  - Max_flow.cpp (Dinic's algorithm for finding max flow in the residual network)
 + ### Data structures:
   - Binary_heap.cpp (Binary heap data structure)
   - Fibonacci_heap.cpp (Fibonacci heap data strucutre)
