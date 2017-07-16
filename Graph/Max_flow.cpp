@@ -144,6 +144,11 @@ int MaxFlow(Graph<VertexInfo, ResidualEdgeInfo> &residualNetwork, int s, int t)
             layers[i] = -1;
     }
 
+    for (int i = 0; i < residualNetwork.Size(); ++i)
+        delete[] capacity_matrix[i];
+    delete[] capacity_matrix;
+    delete[] layers;
+
     return result;
 }
 
