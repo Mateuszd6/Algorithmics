@@ -2,7 +2,7 @@
 
 ## Table of Contents:
 + ### Graph:
-  - Graph.cpp (base graph class)
+  - Graph.cpp (Base graph class)
   - BFS.cpp (BFS algorithm)
   - DFS.cpp (DFS algorithm)
   - Euler_cycle.cpp (Algorithm for finding Euler cycle)
@@ -12,6 +12,7 @@
   - Strongly_connected_components.cpp (Kosaraju's algorithm for finding strongly connected components)
   - Biconnected_components.cpp (Algorithms for finding articulation points, bridges and biconnected components)
   - Max_flow.cpp (Dinic's algorithm for finding max flow in the residual network)
+  - TSP.cpp (Help-Karp algorithm for solving travelling salesman problem)
 + ### Data structures:
   - Binary_heap.cpp (Binary heap data structure)
   - Fibonacci_heap.cpp (Fibonacci heap data strucutre)
