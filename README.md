@@ -13,6 +13,8 @@
   - Biconnected_components.cpp (Algorithms for finding articulation points, bridges and biconnected components)
   - Max_flow.cpp (Dinic's algorithm for finding max flow in the residual network)
   - TSP.cpp (Help-Karp algorithm for solving travelling salesman problem)
+  - Clique.cpp (Algorithm for finding the largest clique of the graph)
+  - Graph_bipartition.cpp (Algorithm for finding the best bipartition of the graph)
 + ### Data structures:
   - Binary_heap.cpp (Binary heap data structure)
   - Fibonacci_heap.cpp (Fibonacci heap data strucutre)
