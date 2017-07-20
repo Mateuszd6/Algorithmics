@@ -19,7 +19,7 @@ namespace utility
     template <typename T>
     inline bool IsLowerOrEqual(T self, T other) { return (!IsGreater(self, other)); }
 
-    
+    // Function used to compare template objects, with generic compare function:
     template <typename T>
 	inline bool IsLower(T self, T other, bool(*_compare)(T, T)) 
     { 
@@ -46,19 +46,43 @@ namespace utility
         return (!IsGreater(self, other, _compare)); 
     }
 
+    // Functions for getting the minimum and maximum from to given objects, using only '<' operator: 
     template <typename T>
     inline T Max(T self, T other) {  return IsGreater(self, other) ? self : other; }
-
     template <typename T>
     inline T Min(T self, T other) {  return IsLower(self, other) ? self : other; }
 
     inline int GetHighestBit (int n)
     {
+        if (n == 0)
+            return -1;
         int res = 0;
         while (n)
         {
             n >>= 1;
             ++res;
+        }    
+        return res;
+    }
+    inline int GetLowestBit(int n)
+    {
+        for (int j = 0; (1 << j) <= n; ++j)
+        {
+            if ((1 << j) & n)
+                return j;
+        }
+
+        // This will be returned if 0 is passed.
+        return -1;
+    }
+    inline int GetNumberOfSetBits(int n)
+    {
+        int res = 0;
+        while (n)
+        {
+            if (n & 1)
+                ++res;
+            n >>= 1;
         }    
         return res;
     }
