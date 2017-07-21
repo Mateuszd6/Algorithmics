@@ -36,7 +36,7 @@ public:
 
 		Edge() {} 
 		Edge(EdgeInfo base_edge, int from, int to) : EdgeInfo(base_edge), from(from), to(to) {}
-		Edge(Edge &other) : EdgeInfo((EdgeInfo)other), from(other.from), to(other.to) {}
+		Edge(const Edge &other) : EdgeInfo((EdgeInfo)other), from(other.from), to(other.to) {}
 	};
 
 	struct Vertex : VertexInfo
@@ -98,6 +98,41 @@ private:
 
 		state[current] =  2;
 
+		return true;
+	}
+
+	bool DFSCheckIfBipartite  (int current, int* colors)
+	{
+		bool result = true;
+		bool color1 = false;
+		bool color2 = false;
+		for (auto edge : vertices[current].edges)
+		{
+			if (colors[edge.to] == 1)
+				color1 = true;
+			if (colors[edge.to] == 2)
+				color2 = true;
+		}
+
+		// Graph is not bipartie.
+		if (color1 && color2)
+			return false;
+		// Color of the vertex is determined.
+		else if (color1)
+			colors[current] = 2;
+		else 
+			colors[current] = 1;
+		
+
+		for (auto edge : vertices[current].edges)
+		{
+			if (colors[edge.to] == 0)
+			{	
+				result = DFSCheckIfBipartite (edge.to, colors);
+				if (!result)
+					return false;
+			}
+		}	
 		return true;
 	}
 
@@ -192,6 +227,43 @@ public:
 			std::cerr << "Unrecognized graph type.";
 			return false;
 		}
+	}
+
+	// Returns true if graph is bipartite and fills given vector with the IDs of the vertices in the first group.
+	bool IsBipartite(std::vector<int> *vertices_in_first_group)
+	{
+		if (Size() <= 1)
+			return true;
+
+		int *colors = new int[Size()]();
+		bool result = true;
+		for (int i = 0; i < Size(); ++i)
+		{
+			if (colors[i] == 0)
+				if (!DFSCheckIfBipartite (i, colors))
+				{
+					result = false;
+					break;
+				}
+		}
+		
+		if (vertices_in_first_group != NULL)
+		{
+			for (int i = 0; i < Size(); ++i)
+			{
+				if (colors[i] == 1)
+					vertices_in_first_group->push_back(i);
+			}
+		}
+
+		delete[] colors;
+		return result;
+	}
+
+	// Returns true if graph is bipartite
+	bool IsBipartite()
+	{
+		return IsBipartite(NULL);
 	}
 
 	// Graph constructor, specify size and type (directed/undirected).
