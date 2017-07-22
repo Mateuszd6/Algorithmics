@@ -23,6 +23,12 @@
   - Trie.cpp (trie tree data structure)
   - Disjoint_set.cpp (Disjoint-set array, also known as Find & Union data structure)
   - K_max_queue.cpp (K-max queue data structure)
++ ### Text algorithms:
+  - Brute_force_pattern_matching.cpp (Brute force matching algorithm)
+  - Bayer_moore.cpp (Bayer-Moore algorithm)
+  - Rabin_karp.coo (Rabin-Karp heuristic matching algorithm)
+  - KMP.cpp (Knuth–Morris–Pratt algorithm)
+  - KMR.cpp (Karp-Miller-Rosenberg algorithm)
 + ### Sorting algorithms:
   - Counting_sort.cpp 
   - Insertion_sort.cpp 
