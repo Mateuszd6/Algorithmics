@@ -52,6 +52,9 @@ namespace utility
     template <typename T>
     inline T Min(T self, T other) {  return IsLower(self, other) ? self : other; }
 
+    // Returns true if given number is a power of 2.
+    inline bool Is2Pow(int n) { return (((n&(n-1))&n) == n); }
+
     inline int GetHighestBit (int n)
     {
         if (n == 0)
